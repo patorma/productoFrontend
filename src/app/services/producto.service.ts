@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Producto } from '../models/producto';
+import { map, catchError } from 'rxjs/operators';
+import swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 const cabecera = {headers: new HttpHeaders({'Content-TYpe': 'application/json'})};
 @Injectable({
@@ -21,8 +24,15 @@ export class ProductoService {
     return this.httpClient.get<Producto[]>(`${this.productoURL}detalle/${id}`);
   }
 
-  crear(producto: Producto): Observable<any>{
-    return this.httpClient.post<any>(`${this.productoURL}producto`, producto, cabecera);
+  crear(producto: Producto): Observable<Producto>{
+    return this.httpClient.post(`${this.productoURL}producto`, producto, cabecera).pipe(
+      map((response: any) => response.producto as Producto),
+      catchError( e =>{
+        console.error(e.error.mensaje);
+        swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
   }
 
   update(producto: Producto): Observable<any>{
