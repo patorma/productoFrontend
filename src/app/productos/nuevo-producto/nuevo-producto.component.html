@@ -5,7 +5,36 @@
             <div class="form-group row">
                 <label for="nombre" class="col-form-label col-sm-2">Nombre Producto</label>
                 <div class="col-sm-6">
-                    <input type="text">
+                    <input type="text" class="form-control" [(ngModel)]="producto.nombreProducto" name="nombreProducto" required minlength="4" #nombreProducto="ngModel">
+                    <div class="alert alert-danger" *ngIf="nombreProducto.invalid && (nombreProducto.dirty || nombreProducto.touched)">
+                        <div *ngIf="nombreProducto.errors.required">
+                            El nombre del producto es requerido
+                        </div>
+                        <div *ngIf="nombreProducto.errors.minlength">
+                            Nombre del producto debe tener 4 carácteres
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="precio" class="col-form-label col-sm-2">Precio</label>
+                <div class="col-sm-6">
+                    <input type="number" name="precio" class="form-control" [(ngModel)]="producto.precio" mane="precio" required precio #precio="ngModel">
+                    <div class="alert alert-danger" *ngIf="precio.invalid && (precio.dirty || precio.touched)">
+                        <div *ngIf="precio.errors.required">
+                            Precio es requerido
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <button class="btn btn-primary" role="button" (click)='create()' *ngIf="!producto.id else elseBlock" [disabled]="!productoForm.form.valid">Crear</button>
+                    <ng-template #elseBlock>
+                        <button class="btn btn-primary" role="button" (click)='update()' [disabled]="!productoForm.form.valid">Editar</button>
+                    </ng-template>
+
                 </div>
             </div>
         </form>

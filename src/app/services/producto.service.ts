@@ -14,14 +14,21 @@ export class ProductoService {
   
  productoURL = 'http://localhost:8080/api/productos/';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient,  private router: Router) { }
   
   getProductos(): Observable<Producto[]>{
     return this.httpClient.get<Producto[]>(`${this.productoURL}lista`);
   }
 
-  getDetalle(id: number): Observable<Producto[]>{
-    return this.httpClient.get<Producto[]>(`${this.productoURL}detalle/${id}`);
+  getDetalle(id: number): Observable<Producto>{
+    return this.httpClient.get<Producto>(`${this.productoURL}detalle/${id}`).pipe(
+      catchError(e => {
+        this.router.navigate(['/lista']);
+        console.error(e.error.mensaje);
+        swal.fire('Error al editar', e.error.mensaje, 'error');
+        return throwError(e);
+      })
+    );
   }
 
   crear(producto: Producto): Observable<Producto>{
