@@ -24,18 +24,22 @@ export class NuevoProductoComponent implements OnInit {
     this.activatedRoute.params.subscribe(params =>{
       let id = params['id']
       if(id){
-        this.productoService.getDetalle(id).subscribe((producto) => this.producto = producto)
+        this.productoService.getDetalle(id).subscribe((producto) => this.producto = producto);
       }
-    })
+    });
   }
   public create(): void {
     this.productoService.crear(this.producto)
       .subscribe(producto => {
-         this.router.navigate(['/lista'])
+         this.router.navigate(['/lista']);
          swal.fire('Nuevo Producto', ` El producto ${producto.nombreProducto} ha sido creado con éxito!`,'success');
       })
   }
   public update(): void {
-
+    this.productoService.update(this.producto)
+     .subscribe(response =>{
+       this.router.navigate(['/lista']);
+       swal.fire('Producto actualizado',`${response.mensaje}: ${response.producto.nombreProducto}`,'success');
+     })
   }
 }

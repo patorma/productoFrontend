@@ -43,7 +43,14 @@ export class ProductoService {
   }
 
   update(producto: Producto): Observable<any>{
-    return this.httpClient.put<any>(`${this.productoURL}actualiza/${producto.id}`,producto,cabecera);
+    return this.httpClient.put<any>(`${this.productoURL}actualiza/${producto.id}`,producto,cabecera).pipe(
+      catchError(e =>{
+        console.error(e.error.mensaje);
+        // titulo,mensaje de error , tipo de mensaje
+        swal.fire(e.error.mensaje, e.error.error,'error');
+        return throwError(e);
+      })
+    );
   }
 
   borrar(id: number): Observable<any>{

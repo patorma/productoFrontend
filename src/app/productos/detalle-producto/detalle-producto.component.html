@@ -1,1 +1,25 @@
-<p>detalle-producto works!</p>
+<div *ngIf="!producto" class="alert alert-info">
+    No hay detalle para ese producto!
+</div>
+
+<table class="table table-bordered table-striped table-sm table-md" *ngIf="producto">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Fecha</th>
+            <th>Ver</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{producto.id}}</td>
+            <td>{{producto.nombreProducto}}</td>
+            <td>{{producto.precio}}</td>
+            <td>{{producto.createAt | date:'dd-MM-yyyy'}}</td>
+            <td><button type="button" name="button" [routerLink]="['/lista']" class="btn btn-primary">Volver</button></td>
+        </tr>
+    </tbody>
+
+</table>
